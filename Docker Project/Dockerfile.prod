@@ -1,0 +1,27 @@
+# Base Image
+FROM node:alpine as builder
+
+# Switch Working Dir to '/app'
+WORKDIR '/app'
+
+# Copy over the package.json into
+# the container
+COPY package.json .
+
+# Install the deps
+RUN npm install
+
+# Copy the rest of the files over
+COPY . .
+
+# Build the production files
+RUN npm run build
+
+##RUN PHASE
+#Base image
+FROM nginx
+
+#Copy over the production files
+# to the nginx webroot
+
+COPY --from=builder /app/build /usr/share/nginx/html

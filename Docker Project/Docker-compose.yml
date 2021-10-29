@@ -1,0 +1,24 @@
+version: '3'
+services:
+    #Postgres DB Container
+    postgres:
+        image: 'postgres:latest'
+        environment:
+            - POSTGRES_USENAME=postgres
+            - POSTGRES_DB=simple_blog_api
+            - POSTGRES_PASSWORD=postgres_password
+    api:
+        build:
+            dockerfile: Dockerfile.dev
+            context: .
+        volumes:
+            - /app/node_modules
+            - .:/app
+        environment:
+            - POSTGRES_USERNAME=postgres
+            - POSTGRES_HOST=postgres
+            - POSTGRES_DB=simple_blog_api
+            - POSTGRES_PASSWORD=postgres_password
+            - PGPORT=5432
+        ports:
+            - "3000:3000"
